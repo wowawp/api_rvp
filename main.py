@@ -17,7 +17,11 @@ sock.connect(server_address)
 try:
     # j = {"jsonrpc": "2.0","method": "listLines","id": 1}
     # query = '{"jsonrpc": "2.0","method": "listLines","id": 1}'
-    request = {'jsonrpc': '2.0', 'method': 'addListener', 'params':  {'lineIds': ["sllLine"], 'intervalMsecs': 1000}, 'id': 1}
+    request = {'jsonrpc': '2.0',
+               'method': 'addListener',
+               'params':  {'lineIds': ["sllLine"],
+                           'intervalMsecs': 1000},
+               'id': 1}
 
     request = json.dumps(request)
     print('sending "%s"' % request)
