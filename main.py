@@ -6,7 +6,10 @@
 import socket
 import sys
 import json
+import time
+# from csv_file import *
 
+dict1 = []
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 listen = True
@@ -15,29 +18,23 @@ server_address = ('10.238.3.101', 2194)
 print(sys.stderr, 'connecting to %s port %s' % server_address)
 sock.connect(server_address)
 try:
-    # j = {"jsonrpc": "2.0","method": "listLines","id": 1}
-    # query = '{"jsonrpc": "2.0","method": "listLines","id": 1}'
     request = {'jsonrpc': '2.0',
                'method': 'addListener',
-               'params':  {'lineIds': ["sllLine"],
+               'params':  {'lineIds': ["filLine", "f2lLine", "bklLine", "bk2Line"],
                            'intervalMsecs': 1000},
                'id': 1}
-
     request = json.dumps(request)
     print('sending "%s"' % request)
     while listen:
+        time.sleep(1)
         sock.sendall(bytes(request, encoding="utf-8"))
-
-        data = sock.recv(8760)
-        # amount_received += len(data)
-        with open('line.txt', 'a') as file:
+        data = sock.recv(16384)
+        with open('json.json', 'a') as file:
             file.write(data.decode('utf-8'))
         a = data.decode('utf-8')
-        # da = json.loads(a)
-        # if 'name' in da['items'] and da['items']['name'].lower() == 'scarf':
-        #     print'There is Scarf'
+        # csv_file()
         print('received "%s"' % data.decode('utf-8'))
-
 finally:
     print('closing socket')
     sock.close()
+
