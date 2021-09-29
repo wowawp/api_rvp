@@ -20,16 +20,16 @@ sock.connect(server_address)
 try:
     request = {'jsonrpc': '2.0',
                'method': 'addListener',
-               'params':  {'lineIds': ["filLine", "f2lLine", "bklLine", "bk2Line"],
+               'params':  {'lineIds': ["sllLine"],
                            'intervalMsecs': 1000},
                'id': 1}
     request = json.dumps(request)
     print('sending "%s"' % request)
+    sock.sendall(bytes(request, encoding="utf-8"))
     while listen:
         time.sleep(1)
-        sock.sendall(bytes(request, encoding="utf-8"))
         data = sock.recv(16384)
-        with open('json.json', 'a') as file:
+        with open('json.json', 'w') as file:
             file.write(data.decode('utf-8'))
         a = data.decode('utf-8')
         # csv_file()
