@@ -1,18 +1,18 @@
 import csv
-import json
+# import json
 
 
 header = ['Line', 'Route', 'head number', 'TCS']
 res = []
 
 
-def csv_file():
+def csv_file(trying):
     with open('json.json', 'r') as file:
-        data = json.load(file)
-        if not 'events' in data or len(data['events']) == 0:
+        # data = json.load(file)
+        if not 'params' in trying:
             print('skip empty')
         else:
-            for p in data['params']['events']:
+            for p in trying['params']['events']:
                 data = [p['line'], p['route'], p['headNo'], p['tcs']]
                 res.append(data)
 

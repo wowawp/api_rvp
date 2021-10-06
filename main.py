@@ -4,12 +4,10 @@
 # TODO 4) Обработать полученный ответ.
 # TODO 5) Записать обработанный ответ в ексель таблицу/ django
 import socket
-
-from Tools.scripts.md5sum import bufsize
-
+import json
 from csv_file import *
 import time
-
+# , 'aplLine', 'krlLine'
 request = {'jsonrpc': '2.0',
            'method': 'addListener',
            'params':  {'lineIds': ['sllLine'],
@@ -31,17 +29,22 @@ try:
     print('sending "%s"' % request)
     sock.sendall(bytes(request, encoding="utf-8"))
     while listen:
-        # time.sleep(1)
-        # data = sock.recv(16384)
-        data = sock.recv(bufsize)
+        data = sock.recv(8192)
         sock.sendall(bytes(approved, encoding="utf-8"))
         if len(data) == 0:
             print('WTF!!!')
         else:
-            with open('json.json', 'w') as file:
-                file.write(data.decode('utf-8'))
-                print('received "%s"' % data.decode('utf-8'))
-            csv_file()
+            try:
+                trying = json.loads(data)
+                print(trying)
+                # with open('json.json', 'w') as file:
+                #     file.write(trying)
+                #     print('received "%s"' % data.decode('utf-8'))
+                csv_file(trying)
+
+            except ValueError as e:
+                pass
+
 finally:
     print('closing socket')
     sock.close()
