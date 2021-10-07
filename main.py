@@ -5,13 +5,19 @@
 # TODO 5) Записать обработанный ответ в ексель таблицу/ django
 import socket
 import json
-from csv_file import *
-import time
-# , 'aplLine', 'krlLine'
+from db import *
+import pymysql.cursors
+
+conn = pymysql.connect(host='127.0.0.1',
+                           user='root',
+                           passwd='password',
+                           db='trains',
+                           cursorclass=pymysql.cursors.DictCursor)
+
 request = {'jsonrpc': '2.0',
            'method': 'addListener',
-           'params':  {'lineIds': ['sllLine'],
-                       'intervalMsecs': 1000},
+           'params': {'lineIds': ['sllLine'],
+                      'intervalMsecs': 1000},
            'id': 1}
 approved = {'jsonrpc': '2.0',
             'result': {},
@@ -37,10 +43,7 @@ try:
             try:
                 trying = json.loads(data)
                 print(trying)
-                # with open('json.json', 'w') as file:
-                #     file.write(trying)
-                #     print('received "%s"' % data.decode('utf-8'))
-                csv_file(trying)
+                db(conn, trying)
 
             except ValueError as e:
                 pass
@@ -48,3 +51,5 @@ try:
 finally:
     print('closing socket')
     sock.close()
+    conn.close()
+
